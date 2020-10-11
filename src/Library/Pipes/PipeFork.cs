@@ -11,28 +11,36 @@ namespace CompAndDel.Pipes
     {
         IPipe next2Pipe;
         IPipe nextPipe;
+        IConditionalFilter Condition {get;}
         
         /// <summary>
-        /// La cañería recibe una imagen, la clona y envìa la original por una cañeria y la clonada por otra.
+        /// La cañería recibe una imagen y, según un condicional, se envía por una cañería o la otra
         /// </summary>
-        /// <param name="tipoFiltro">Tipo de filtro que se debe aplicar sobre la imagen. Se crea un nuevo filtro con los parametros por defecto</param>
-        /// <param name="nextPipe">Siguiente cañeria con filtro</param>
-        /// <param name="next2Pipe">Siguiente cañeria sin filtro</param>
-        public PipeFork(IPipe nextPipe, IPipe next2Pipe) 
+        /// <param name="truePipe">Cañeria si filtro igual a true</param>
+        /// <param name="falsePipe">Cañeria si filtro igual a false</param>
+        /// <param name="condition">Condición a cumplir para que se utilice un filtro u otro</param>
+
+        public PipeFork(IPipe truePipe, IPipe falsePipe, IConditionalFilter condition) 
         {
-            this.next2Pipe = next2Pipe;
-            this.nextPipe = nextPipe;           
+            this.nextPipe = truePipe;
+            this.next2Pipe = falsePipe;
+            this.Condition = condition;           
         }
         
         /// <summary>
-        /// La cañería recibe una imagen, construye un duplicado de la misma, 
-        /// y envía la original por una cañería y el duplicado por otra.
+        /// La cañería recibe una imagen y, según un condicional, se envía por una cañería o la otra
         /// </summary>
         /// <param name="picture">imagen a filtrar y enviar a las siguientes cañerías</param>
         public IPicture Send(IPicture picture)
         {
-            next2Pipe.Send(picture.Clone());
-            return this.nextPipe.Send(picture);
+            if(this.Condition.AreThere(picture))
+            {
+                return this.nextPipe.Send(picture);
+            }
+            else
+            {
+                return this.next2Pipe.Send(picture);
+            }            
         }
     }
 }
