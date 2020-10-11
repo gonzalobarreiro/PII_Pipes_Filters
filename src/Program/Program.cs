@@ -21,14 +21,15 @@ namespace CompAndDel
             creado para este ejercicio, este pipe le aplica el filto que gurda la imagen. De ahi se va al pipe negative que hace
             lo mismo, hasta que llega al pipe null.
             */
-            FilterSaving saving = new FilterSaving();
-            
+            FilterSaving saving = FilterSaving.Instance;
+
             PipeSerial saveImageAlreadyWentThrough = new PipeSerial(saving, new PipeNull());
             PipeSerial negative = new PipeSerial(new FilterNegative(), saveImageAlreadyWentThrough);
-
-            PipeSerial saveImage = new PipeSerial(saving, negative);
+            PipeSerial twitterFilter = new PipeSerial(new TwitterFilter(),negative);
+            PipeSerial saveImage = new PipeSerial(saving, twitterFilter);
             PipeSerial grayScale = new PipeSerial(new FilterGreyscale(), saveImage);
             grayScale.Send(pic);
+            
 
 
 
