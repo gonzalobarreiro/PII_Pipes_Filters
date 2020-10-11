@@ -19,7 +19,7 @@ namespace CompAndDel.Filters
             //FilterSaving.Instance.Filter(image);
 
             var twitter = new TwitterImage(consumerKey, consumerKeySecret, accessToken, accessTokenSecret);
-            Console.WriteLine(twitter.PublishToTwitter("Nuevo filtro", $@"./../../Program/FilteredImage{FilterSaving.Instance.Count}.jpg"));
+            Console.WriteLine(twitter.PublishToTwitter("Nuevo filtro", $@"FilteredImage{FilterSaving.Instance.Count}.jpg"));
             return image;
         }
     }
