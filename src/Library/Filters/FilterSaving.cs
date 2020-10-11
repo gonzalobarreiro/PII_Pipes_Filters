@@ -13,7 +13,6 @@ namespace CompAndDel.Filters
         public IPicture Filter(IPicture image)
         {
             count ++;
-            System.Console.WriteLine(count);
             IPicture pic = image.Clone();
             PictureProvider picSaved = new PictureProvider();
             picSaved.SavePicture(pic,$@"FilteredImage{count}.jpg");
